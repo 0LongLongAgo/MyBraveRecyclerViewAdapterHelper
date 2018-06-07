@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="signin.company.com.recyclerviewdemo.simpleuse.SimpleUseActivity">
+
+    <Button
+        android:id="@+id/id_bt_LinearLayoutManagerRecyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:onClick="onClick"
+        android:layout_marginTop="15dp"
+        android:text="LinearLayoutManagerRecyclerview" />
+    <Button
+        android:id="@+id/id_bt_GridLayoutManagerRecyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:onClick="onClick"
+        android:layout_marginTop="15dp"
+        android:text="GridLayoutManagerRecyclerview" />
+    <Button
+        android:id="@+id/id_bt_StaggeredLayoutManagerRecyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:onClick="onClick"
+        android:layout_marginTop="15dp"
+        android:text="StaggeredLayoutManagerRecyclerview" />
+
+    <Button
+        android:id="@+id/id_bt_LinearLayoutManagerTimeLineRecyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:onClick="onClick"
+        android:layout_marginTop="15dp"
+        android:text="LinearLayoutManagerTimeLineRecyclerview" />
+
+    <Button
+        android:id="@+id/id_bt_PullToRefreshAndPushDownloadActivity"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:onClick="onClick"
+        android:layout_marginTop="15dp"
+        android:text="PullToRefreshAndPushDownloadActivity" />
+
+
+</LinearLayout>

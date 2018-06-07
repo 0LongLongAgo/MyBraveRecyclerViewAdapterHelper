@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="glide_tag_id" type="id"/>
+    <item name="view_tag_id0" type="id"/>
+    <item name="view_tag_id1" type="id"/>
+    <item name="view_tag_id2" type="id"/>
+    <item name="view_tag_id3" type="id"/>
+    <item name="view_tag_id4" type="id"/>
+    <item name="view_tag_id5" type="id"/>
+    <item name="rich_edit_tag1" type="id"/>
+    <item type="id" name="glide_tag" />
+    <item type="id" name="drag_handle" />
+    <item type="id" name="click_remove" />
+    <item type="id" name="id_message" />
+    <item type="id" name="id_iv_praise" />
+    <item type="id" name="id_iv_feet" />
+    <item type="id" name="id_tv_text" />
+</resources>

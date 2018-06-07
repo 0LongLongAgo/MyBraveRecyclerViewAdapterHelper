@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/id_ll_container"
+    android:orientation="vertical"
+    tools:context="signin.company.com.recyclerviewdemo.fragment.MyFragmentActivity">
+    <!--<fragment-->
+        <!--android:id="@+id/id_my_fragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:name="signin.company.com.recyclerviewdemo.fragment.MyFragment"-->
+        <!--/>-->
+    <!--<FrameLayout-->
+        <!--android:id="@+id/id_fragment_container"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="1"-->
+        <!--&gt;</FrameLayout>-->
+</LinearLayout>
