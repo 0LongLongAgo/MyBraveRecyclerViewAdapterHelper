@@ -32,6 +32,7 @@ public class DataServer {
             list.add(status);
         }
         return list;
+//        return null;
     }
 
     public static List<Status> addData(List list, int dataSize) {
