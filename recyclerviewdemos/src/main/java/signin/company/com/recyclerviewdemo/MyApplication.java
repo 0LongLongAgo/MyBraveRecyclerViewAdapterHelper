@@ -16,6 +16,7 @@ package signin.company.com.recyclerviewdemo;
 
 import android.app.Application;
 
+import signin.company.com.recyclerviewdemo.statusview.LoadingAndRetryManager;
 import signin.company.com.recyclerviewdemo.util.Utils;
 
 
@@ -39,6 +40,7 @@ public class MyApplication extends Application {
         super.onCreate();
         appContext =this;
         Utils.init(this);
+        initStatusLayout();
 //        if (BuildConfig.DEBUG) {
 //            Logger
 //                    .init("BaseRecyclerViewAdapter")                 // default PRETTYLOGGER or use just init()
@@ -49,5 +51,11 @@ public class MyApplication extends Application {
 //
 //
 //        }
+    }
+
+    private void initStatusLayout() {
+        LoadingAndRetryManager.BASE_RETRY_LAYOUT_ID = R.layout.base_retry;
+        LoadingAndRetryManager.BASE_LOADING_LAYOUT_ID = R.layout.base_loading;
+        LoadingAndRetryManager.BASE_EMPTY_LAYOUT_ID = R.layout.base_empty;
     }
 }

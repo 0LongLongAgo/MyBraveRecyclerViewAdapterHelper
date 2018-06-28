@@ -20,8 +20,11 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import signin.company.com.recyclerviewdemo.R;
 import signin.company.com.recyclerviewdemo.baserecyclerviewadapterhelper.pulltorefresh.loadmore.CustomLoadMoreView;
 import signin.company.com.recyclerviewdemo.data.DataServer;
+import signin.company.com.recyclerviewdemo.statusview.LoadingAndRetryManager;
+import signin.company.com.recyclerviewdemo.statusview.OnLoadingAndRetryListener;
 
 public class PullToRefreshAndPushDownloadActivity extends AppCompatActivity implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener{
+    LoadingAndRetryManager mLoadingAndRetryManager;
     public static void newInstance(Activity activity) {
         Intent intent = new Intent(activity,PullToRefreshAndPushDownloadActivity.class);
 //        intent.putExtra("balance", balance);
@@ -38,6 +41,7 @@ public class PullToRefreshAndPushDownloadActivity extends AppCompatActivity impl
     private int delayMillis = 1000;
     private int mCurrentCounter = 0;//数据条目计数器
     private boolean isErr;
+    boolean isFirstRequest = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,8 +51,51 @@ public class PullToRefreshAndPushDownloadActivity extends AppCompatActivity impl
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeColors(Color.rgb(47, 223, 189));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
         initAdapter();
         addHeadView();
+        mLoadingAndRetryManager = LoadingAndRetryManager.generate(mSwipeRefreshLayout, new OnLoadingAndRetryListener() {
+            @Override
+            public void setRetryEvent(View retryView) {
+//                retryView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Toast.makeText(PullToRefreshAndPushDownloadActivity.this, "点击了retry", Toast.LENGTH_LONG).show();
+//                        onRefresh();
+//                    }
+//                });
+                View view = retryView.findViewById(R.id.id_btn_retry);
+                view.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        Toast.makeText(PullToRefreshAndPushDownloadActivity.this, "点击了retry", Toast.LENGTH_LONG).show();
+                        mLoadingAndRetryManager.showContent();
+                        mSwipeRefreshLayout.setRefreshing(true);
+                        onRefresh();
+                    }
+                });
+            }
+
+            @Override
+            public void setLoadingEvent(View loadingView) {
+                super.setLoadingEvent(loadingView);
+            }
+
+            @Override
+            public void setEmptyEvent(View emptyView) {
+                super.setEmptyEvent(emptyView);
+            }
+
+            @Override
+            public boolean isSetRetryLayout() {
+                return super.isSetRetryLayout();
+            }
+        });
+        mLoadingAndRetryManager.showLoading();
+        onRefresh();
     }
 
     @Override
@@ -57,11 +104,22 @@ public class PullToRefreshAndPushDownloadActivity extends AppCompatActivity impl
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                if (isFirstRequest) {
+                   mLoadingAndRetryManager.showRetry();
+                   isFirstRequest= false;
+                   return;
+                }
+                int size = 0;
+                if (DataServer.getSampleData(PAGE_SIZE) != null) {
+                    size = DataServer.getSampleData(PAGE_SIZE).size();
+                }
+                mLoadingAndRetryManager.showContent();
                 pullToRefreshAdapter.setNewData(DataServer.getSampleData(PAGE_SIZE));
                 isErr = false;
-                mCurrentCounter = PAGE_SIZE;
+                mCurrentCounter += size;
                 mSwipeRefreshLayout.setRefreshing(false);
                 pullToRefreshAdapter.setEnableLoadMore(true);
+                mSwipeRefreshLayout.setEnabled(true);
             }
         }, delayMillis);
     }
@@ -84,9 +142,9 @@ public class PullToRefreshAndPushDownloadActivity extends AppCompatActivity impl
         pullToRefreshAdapter = new PullToRefreshAdapter();
         pullToRefreshAdapter.getData().clear();
         pullToRefreshAdapter.setOnLoadMoreListener(this, mRecyclerView);
-        pullToRefreshAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
-        View emptyView = getLayoutInflater().inflate(R.layout.empty_view, (ViewGroup) mRecyclerView.getParent(), false);
-        pullToRefreshAdapter.setEmptyView(emptyView);
+        pullToRefreshAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
+//        View emptyView = getLayoutInflater().inflate(R.layout.empty_view, (ViewGroup) mRecyclerView.getParent(), false);
+//        pullToRefreshAdapter.setEmptyView(emptyView);
 //        pullToRefreshAdapter.setPreLoadNumber(3);
         mRecyclerView.setAdapter(pullToRefreshAdapter);
         mCurrentCounter = pullToRefreshAdapter.getData().size();
@@ -101,16 +159,18 @@ public class PullToRefreshAndPushDownloadActivity extends AppCompatActivity impl
     @Override
     public void onLoadMoreRequested() {
         mSwipeRefreshLayout.setEnabled(false);
+        mCurrentCounter = pullToRefreshAdapter.getData().size();
         if (pullToRefreshAdapter.getData().size() < PAGE_SIZE) {//已经没有更多数据
             pullToRefreshAdapter.loadMoreEnd(true);
         } else {
-//            if (mCurrentCounter >= TOTAL_COUNTER) {//总条目
-////                    pullToRefreshAdapter.loadMoreEnd();//default visible
-//                //是否显示加载
-//                pullToRefreshAdapter.loadMoreEnd(mLoadMoreEndGone);//true is gone,false is visible
-//            } else {
-//                if (isErr) {//错误样式出现过
-//                    pullToRefreshAdapter.setEnableLoadMore(true);
+            if (mCurrentCounter >= TOTAL_COUNTER) {//总条目
+//                    pullToRefreshAdapter.loadMoreEnd();//default visible
+                //是否显示加载
+                pullToRefreshAdapter.loadMoreEnd(mLoadMoreEndGone);//true is gone,false is visible
+
+            } else {
+                if (isErr) {//错误样式出现过
+                    pullToRefreshAdapter.setEnableLoadMore(true);
                     mRecyclerView.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -121,14 +181,14 @@ public class PullToRefreshAndPushDownloadActivity extends AppCompatActivity impl
                         }
                     },2000);
 //
-//                } else {
-//                    isErr = true;
-//                    Toast.makeText(PullToRefreshAndPushDownloadActivity.this, R.string.network_err, Toast.LENGTH_LONG).show();
-//                    pullToRefreshAdapter.loadMoreFail();
-//
-//                }
+                } else {
+                    isErr = true;
+                    Toast.makeText(PullToRefreshAndPushDownloadActivity.this, R.string.network_err, Toast.LENGTH_LONG).show();
+                    pullToRefreshAdapter.loadMoreFail();
+                }
             }
-
-//        }
+        }
+        mSwipeRefreshLayout.setRefreshing(false);
+        mSwipeRefreshLayout.setEnabled(true);
     }
 }

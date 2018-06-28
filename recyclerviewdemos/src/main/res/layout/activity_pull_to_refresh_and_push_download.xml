@@ -5,11 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="signin.company.com.recyclerviewdemo.baserecyclerviewadapterhelper.pulltorefresh.PullToRefreshAndPushDownloadActivity">
+    <TextView
+        android:id="@+id/id_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="brave测试"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textColor="@color/white_text_color"
+        android:background="@color/colorPrimary"/>
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:layout_below="@+id/id_title"
         >
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_list"
